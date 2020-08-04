@@ -25,6 +25,111 @@ class Color:
     CYAN = '#4EB1BA'
     GRAY = '#A9A9A9'
 
+class Text:
+
+    MADE_BY = 'Made By: Bill M. -- Fondjo group'
+    HEADER =  'LUDO - THE GAME'
+
+
+class Path:
+
+    def __init__(self):
+
+        self.green_path = []
+        self.red_path = []
+        self.blue_path = []
+        self.yellow_path = []
+        self.gx = None
+        self.gy = None 
+        self.ry = None
+        self.by = None
+        self.count = None
+
+    def update_coordinates(self, gx, gy, ry, by, count):
+
+        self.gx = gx
+        self.gy = gy
+        self.ry = ry
+        self.by = by
+        self.count = count
+
+    def start_populating(self):
+
+        #1
+        self.update_coordinates(60, 260, 540, 340, 5)
+        self.direct(pow_index=0, direction='right')
+        #2
+        self.update_coordinates(260, 220, 340, 380, 5)
+        self.direct(pow_index=3, direction='up')
+        #3
+        self.update_coordinates(260, 20, 340, 580, 3)
+        self.direct(direction='right') 
+        #4
+        self.update_coordinates(340, 60, 260, 540, 5)
+        self.direct(pow_index=0, direction='down')
+        #5
+        self.update_coordinates(380, 260, 220, 340, 5)
+        self.direct(pow_index=3, direction='right')
+        #6
+        self.update_coordinates(580, 260, 20, 340, 3)
+        self.direct(direction='down')
+        #7
+        self.update_coordinates(540, 340, 60, 260, 5)
+        self.direct(pow_index=0, direction='left')
+        #8
+        self.update_coordinates(340, 380, 260, 220, 5)
+        self.direct(pow_index=3, direction='down')
+        #9
+        self.update_coordinates(340, 580, 260, 20, 3)
+        self.direct(direction='left')
+        #10
+        self.update_coordinates(260, 540, 340, 60, 5)
+        self.direct(pow_index=0, direction='up')
+        #11
+        self.update_coordinates(220, 340, 380, 260, 6)
+        self.direct(pow_index=3, direction='left')
+        #12
+        self.update_coordinates(20, 300, 580, 300, 7)
+        self.direct(direction='right')
+
+    def direct_horizontal(self, k, pow_index = -1):
+
+        for i in range(self.count):
+            if i == pow_index:
+                p = 1
+            else:
+                p = 0
+            self.green_path.append((self.gx  +  k*i*Board.SQUARE_SIZE, self.gy, p))
+            self.red_path.append((self.gy, self.ry  -  k*i*Board.SQUARE_SIZE, p))
+            self.blue_path.append((self.ry - k*i*Board.SQUARE_SIZE, self.by, p))
+            self.yellow_path.append((self.by, self.gx + k*i*Board.SQUARE_SIZE, p))
+
+    def direct_vertical(self, k, pow_index = -1):
+
+        for i in range(self.count):
+            if i == pow_index:
+                p = 1
+            else:
+                p = 0
+            self.green_path.append((self.gx, self.gy - k*i*Board.SQUARE_SIZE, p))
+            self.red_path.append((self.gy - k*i*Board.SQUARE_SIZE,self.ry, p))
+            self.blue_path.append((self.ry, self.by + k*i*Board.SQUARE_SIZE, p))
+            self.yellow_path.append((self.by + k*i*Board.SQUARE_SIZE, self.gx, p))
+
+
+    def direct(self, direction, pow_index = -1):
+        if direction=='right':
+            self.direct_horizontal(1, pow_index=pow_index)
+        elif direction=='left':
+            self.direct_horizontal(-1, pow_index=pow_index)
+        elif direction=='down':
+            self.direct_vertical(-1, pow_index=pow_index)
+        else:
+            self.direct_vertical(1, pow_index=pow_index)
+
+path = Path()
+path.start_populating()
+
 
 
 class LudoBoard:
@@ -106,7 +211,7 @@ class LudoBoard:
                 self.draw_rectangle(i*9 + 1.65, j*9 + 3.65, i*9 + 3.3, j*9 + 5.3, Color.BLUE, 0)
                 self.draw_rectangle(i*9 + 3.65, j*9 + 1.65, i*9 + 5.3, j*9 + 3.3, Color.BLUE, 0)
 
-	def path(self):
+	def board_static(self):
 
         self.canvas.place(x=20, y=80)
 
@@ -138,5 +243,23 @@ class LudoBoard:
             else:
                 self.draw_rectangle(j + 0.5, i + 0.5, j + 1.5, i + 1.5, Color.BLUE, 1)
             self.draw_circle(j + 0.7, i + 0.7, j + 1.3, i + 1.3, Color.GRAY)
+
+		self.draw_polygon(6.5, 6.5, 6.5, 9.5, Color.GREEN, 1)
+        self.draw_polygon(6.5, 6.5, 9.5, 6.5, Color.YELLOW, 1)
+        self.draw_polygon(9.5, 9.5, 6.5, 9.5, Color.RED, 1)
+        self.draw_polygon(9.5, 9.5, 9.5, 6.5, Color.BLUE, 1)
+
+
+	def create_panel(self):
+        self.frame.place(x=700, y=80)
+        self.Quit.place(x=910, y=620)
+        self.title_bar.pack(side=tk.TOP, fill=tk.X)
+        self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
+
+	def create(self):
+        self.board_static()
+        self.home()
+        self.create_panel() 
+	
 
 
