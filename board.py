@@ -174,7 +174,8 @@ class LudoBoard:
 
 
 	def home(self):
-
+		
+		# Outer rectangles
         for i, j in Board.POINTS:
 
             if i == 0 and j == 0:
@@ -187,7 +188,8 @@ class LudoBoard:
                 self.draw_rectangle(i*9 + 0.5, j*9 + 0.5, i*9 + 6.5, j*9 + 6.5, Color.BLUE, 3)
                 
             self.draw_rectangle(i*9 + 1.25, j*9 + 1.25, i*9 + 5.75, j*9 + 5.75, Color.DEFAULT, 0)
-            
+         
+		# Inner rectangles   
         for i, j in Board.POINTS:
 
             if i == 0 and j == 0:
@@ -211,7 +213,7 @@ class LudoBoard:
                 self.draw_rectangle(i*9 + 1.65, j*9 + 3.65, i*9 + 3.3, j*9 + 5.3, Color.BLUE, 0)
                 self.draw_rectangle(i*9 + 3.65, j*9 + 1.65, i*9 + 5.3, j*9 + 3.3, Color.BLUE, 0)
 
-	def board_static(self):
+	def color_path(self):
 
         self.canvas.place(x=20, y=80)
 
@@ -257,9 +259,15 @@ class LudoBoard:
         self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
 
 	def create(self):
-        self.board_static()
+        self.color_path()
         self.home()
-        self.create_panel() 
+        self.create_panel()
+
+	def get_canvas(self):
+        return self.canvas
+
+    def get_frame(self):
+        return self.frame 
 	
 
 
